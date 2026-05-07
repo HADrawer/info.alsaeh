@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alsaeh.bh — Tourism Recommender System for Bahrain</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── CSS Variables ──────────────────────────────── */
+    :root {
+      --ocean:   #0a4a62;
+      --ocean-light: #1a6f8e;
+      --sand:    #c9973a;
+      --sand-light: #f0d49a;
+      --crimson: #c5112e;
+      --cream:   #fdf9f2;
+      --ink:     #1a1810;
+      --muted:   #6b6050;
+      --card-bg: #ffffff;
+      --border:  rgba(10,74,98,.12);
+      --shadow:  0 8px 40px rgba(10,74,98,.10);
+      --radius:  18px;
+    }
+
+    /* ─── Reset & Base ───────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── Grain overlay ─────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: .4;
+    }
+
+    /* ─── Typography ────────────────────────────────── */
+    h1, h2, h3 { font-family: 'DM Serif Display', serif; line-height: 1.15; }
+    h1 { font-size: clamp(2.8rem, 6vw, 5.5rem); letter-spacing: -.02em; }
+    h2 { font-size: clamp(1.9rem, 3.5vw, 3rem); }
+    h3 { font-size: 1.25rem; font-family: 'DM Sans', sans-serif; font-weight: 600; }
+    p  { color: var(--muted); font-weight: 300; }
+
+    .label {
+      font-size: .72rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: var(--sand);
+    }
+
+    /* ─── Layout helpers ────────────────────────────── */
+    .container {
+      width: min(1200px, 92%);
+      margin-inline: auto;
+    }
+
+    section { padding: 100px 0; }
+
+    .section-head {
+      margin-bottom: 60px;
+    }
+    .section-head h2 { margin-top: 10px; }
+    .section-head p  { max-width: 560px; margin-top: 14px; font-size: 1.05rem; }
+
+    /* ─── NAV ───────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 0;
+      transition: background .3s, box-shadow .3s;
+    }
+    nav.scrolled {
+      background: rgba(253,249,242,.92);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 2px 24px rgba(10,74,98,.08);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(1200px,92%);
+      margin-inline: auto;
+    }
+    .nav-brand {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.55rem;
+      color: var(--ocean);
+      text-decoration: none;
+    }
+    .nav-brand span { color: var(--sand); }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: .9rem;
+      font-weight: 500;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--ocean); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 28px;
+      border-radius: 50px;
+      font-size: .9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s, background .2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--ocean);
+      color: #fff;
+      box-shadow: 0 6px 24px rgba(10,74,98,.28);
+    }
+    .btn-primary:hover { background: var(--ocean-light); box-shadow: 0 10px 32px rgba(10,74,98,.38); }
+    .btn-outline {
+      background: transparent;
+      color: var(--ocean);
+      border: 1.5px solid var(--ocean);
+    }
+    .btn-outline:hover { background: var(--ocean); color: #fff; }
+
+    /* ─── HERO ──────────────────────────────────────── */
+    #hero {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 140px 0 100px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Geometric background pattern */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(10,74,98,.07) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 20% 80%, rgba(201,151,58,.08) 0%, transparent 60%);
+    }
+
+    /* Decorative circle */
+    .hero-orb {
+      position: absolute;
+      right: -120px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 560px;
+      height: 560px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(10,74,98,.12), rgba(201,151,58,.10));
+      border: 1px solid rgba(10,74,98,.08);
+    }
+    .hero-orb::before {
+      content: '';
+      position: absolute;
+      inset: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(10,74,98,.08);
+    }
+    .hero-orb::after {
+      content: '';
+      position: absolute;
+      inset: 80px;
+      border-radius: 50%;
+      border: 1px solid rgba(201,151,58,.14);
+    }
+
+    .hero-content {
+      position: relative;
+      max-width: 750px;
+      animation: fadeUp .9s ease both;
+    }
+    .hero-content .label { margin-bottom: 18px; }
+    .hero-content h1 {
+      color: var(--ocean);
+      margin-bottom: 10px;
+    }
+    .hero-content h1 em {
+      font-style: italic;
+      color: var(--sand);
+    }
+    .hero-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 24px;
+    }
+    .hero-desc {
+      font-size: 1.05rem;
+      max-width: 540px;
+      margin-bottom: 42px;
+      line-height: 1.8;
+    }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    /* Logo placeholder in hero */
+    .logo-placeholder {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(10,74,98,.06);
+      border: 1px dashed rgba(10,74,98,.25);
+      border-radius: 12px;
+      padding: 10px 18px;
+      margin-bottom: 28px;
+      font-size: .82rem;
+      color: var(--ocean);
+      font-weight: 500;
+    }
+    .logo-placeholder svg { opacity: .5; }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: .75rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      animation: bounce 2s ease infinite;
+    }
+    .scroll-hint::after {
+      content: '';
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--muted), transparent);
+    }
+
+    /* ─── ABOUT ─────────────────────────────────────── */
+    #about {
+      background: linear-gradient(160deg, rgba(10,74,98,.04) 0%, transparent 50%);
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .about-visual {
+      border-radius: 28px;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--ocean) 0%, var(--ocean-light) 50%, rgba(201,151,58,.4) 100%);
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 36px;
+      position: relative;
+    }
+    .about-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .about-visual-label {
+      position: relative;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem;
+      color: rgba(255,255,255,.9);
+      line-height: 1.3;
+    }
+    .about-visual-sub {
+      position: relative;
+      color: rgba(255,255,255,.6);
+      font-size: .9rem;
+      margin-top: 8px;
+    }
+
+    .problem-box {
+      background: rgba(197,17,46,.05);
+      border-left: 3px solid var(--crimson);
+      border-radius: 0 12px 12px 0;
+      padding: 20px 22px;
+      margin-bottom: 28px;
+    }
+    .problem-box h3 { color: var(--crimson); margin-bottom: 6px; font-size: 1rem; }
+    .problem-box p  { font-size: .95rem; }
+
+    .solution-box {
+      background: rgba(10,74,98,.05);
+      border-left: 3px solid var(--ocean);
+      border-radius: 0 12px 12px 0;
+      padding: 20px 22px;
+    }
+    .solution-box h3 { color: var(--ocean); margin-bottom: 6px; font-size: 1rem; }
+    .solution-box p  { font-size: .95rem; }
+
+    /* ─── OBJECTIVES ────────────────────────────────── */
+    #objectives { background: var(--ocean); overflow: hidden; }
+    #objectives .label  { color: var(--sand-light); }
+    #objectives h2      { color: #fff; }
+    #objectives .section-head p { color: rgba(255,255,255,.6); }
+
+    .objectives-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+    .obj-card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius);
+      padding: 30px 26px;
+      transition: background .25s, transform .25s;
+    }
+    .obj-card:hover { background: rgba(255,255,255,.11); transform: translateY(-4px); }
+    .obj-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: rgba(201,151,58,.35);
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+    .obj-card h3 { color: #fff; font-size: 1rem; margin-bottom: 8px; }
+    .obj-card p  { color: rgba(255,255,255,.55); font-size: .88rem; }
+
+    /* ─── FEATURES ──────────────────────────────────── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+    }
+    .feat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: var(--shadow);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .feat-card:hover { transform: translateY(-5px); box-shadow: 0 16px 50px rgba(10,74,98,.14); }
+    .feat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(10,74,98,.1), rgba(10,74,98,.05));
+      display: grid;
+      place-items: center;
+      margin-bottom: 20px;
+      font-size: 1.35rem;
+    }
+    .feat-card h3 { font-size: 1.05rem; margin-bottom: 8px; color: var(--ocean); }
+    .feat-card p  { font-size: .9rem; }
+
+    /* ─── TECH STACK ────────────────────────────────── */
+    #stack {
+      background: linear-gradient(160deg, rgba(201,151,58,.05) 0%, rgba(253,249,242,1) 40%);
+    }
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px;
+    }
+    .stack-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 22px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform .25s;
+    }
+    .stack-card:hover { transform: translateY(-4px); }
+    .stack-emoji { font-size: 2rem; margin-bottom: 14px; display: block; }
+    .stack-role {
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--sand);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .stack-card h3 { font-size: 1rem; color: var(--ocean); }
+
+    /* ─── ARCHITECTURE ──────────────────────────────── */
+    .arch-diagram {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .arch-tier {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    .arch-box {
+      background: linear-gradient(135deg, rgba(10,74,98,.07), rgba(10,74,98,.03));
+      border: 1px solid rgba(10,74,98,.14);
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--ocean);
+      text-align: center;
+      min-width: 130px;
+    }
+    .arch-box.ext {
+      background: linear-gradient(135deg, rgba(201,151,58,.10), rgba(201,151,58,.04));
+      border-color: rgba(201,151,58,.22);
+      color: #7a5c14;
+    }
+    .arch-arrow {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1.4rem;
+      padding: 8px 0;
+    }
+    .arch-label {
+      font-size: .7rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* ─── SCREENSHOTS ───────────────────────────────── */
+    #screenshots { background: var(--ocean); }
+    #screenshots .label { color: var(--sand-light); }
+    #screenshots h2     { color: #fff; }
+    #screenshots .section-head p { color: rgba(255,255,255,.6); }
+
+    .screenshots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 22px;
+    }
+    .ss-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.1);
+    }
+    .ss-placeholder {
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      /* REPLACE: swap this background with an actual <img> tag when screenshots are ready */
+      background: linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .ss-placeholder-icon { font-size: 2rem; opacity: .4; }
+    .ss-placeholder-text { font-size: .8rem; color: rgba(255,255,255,.35); }
+    .ss-label {
+      padding: 14px 18px;
+      font-size: .88rem;
+      color: rgba(255,255,255,.75);
+      font-weight: 500;
+    }
+
+    /* ─── TEAM ──────────────────────────────────────── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 22px;
+      margin-bottom: 50px;
+    }
+    .team-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 34px 24px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform .25s;
+    }
+    .team-card:hover { transform: translateY(-5px); }
+    .team-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--ocean), var(--ocean-light));
+      display: grid;
+      place-items: center;
+      margin: 0 auto 18px;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.7rem;
+      color: rgba(255,255,255,.9);
+      letter-spacing: -.02em;
+    }
+    .team-card h3 { color: var(--ocean); font-size: 1.05rem; margin-bottom: 6px; }
+    .team-card .team-id {
+      font-size: .78rem;
+      color: var(--muted);
+      background: rgba(10,74,98,.06);
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    /* Supervisor box */
+    .supervisor-box {
+      background: linear-gradient(135deg, var(--ocean), var(--ocean-light));
+      border-radius: 20px;
+      padding: 36px 40px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      box-shadow: 0 12px 40px rgba(10,74,98,.25);
+    }
+    .supervisor-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(255,255,255,.15);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+    .supervisor-box h3 { color: #fff; font-family: 'DM Serif Display', serif; font-size: 1.35rem; }
+    .supervisor-box .sub { color: rgba(255,255,255,.65); font-size: .9rem; margin-top: 4px; }
+    .supervisor-box .role-tag {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      color: rgba(255,255,255,.85);
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    /* ─── UNIVERSITY banner ─────────────────────────── */
+    .uni-banner {
+      background: rgba(10,74,98,.04);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-top: 50px;
+    }
+    .uni-banner-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .uni-banner h4 { color: var(--ocean); font-size: 1rem; }
+    .uni-banner p  { font-size: .88rem; margin-top: 2px; }
+
+    /* ─── FOOTER ────────────────────────────────────── */
+    footer {
+      background: var(--ink);
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      padding: 48px 0 32px;
+    }
+    .footer-brand {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .footer-brand span { color: var(--sand); }
+    footer p { font-size: .88rem; line-height: 2; }
+    .footer-divider {
+      width: 40px;
+      height: 1px;
+      background: rgba(255,255,255,.15);
+      margin: 20px auto;
+    }
+
+    /* ─── Animations ────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(-6px); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .about-grid         { grid-template-columns: 1fr; }
+      .about-visual       { min-height: 260px; }
+      .nav-links          { display: none; }
+      .arch-diagram       { padding: 28px 18px; }
+      .supervisor-box     { flex-direction: column; text-align: center; gap: 16px; }
+      .uni-banner         { flex-direction: column; text-align: center; }
+      .hero-actions       { flex-direction: column; }
+      section             { padding: 70px 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── NAV ─────────────────────────────────────── -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a class="nav-brand" href="#">Alsaeh<span>.bh</span></a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#objectives">Objectives</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#stack">Technology</a></li>
+        <li><a href="#screenshots">Screenshots</a></li>
+        <li><a href="#team">Team</a></li>
+      </ul>
+      <!-- REPLACE #system-link with the real URL when the app is deployed -->
+      <a href="#system-link" class="btn btn-primary" style="font-size:.85rem;padding:10px 22px;">
+        Visit System ↗
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ─────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-orb"></div>
+    <div class="container">
+      <div class="hero-content">
+
+        <!-- REPLACE: Insert real project logo image below this comment
+             Example: <img src="logo.png" alt="Alsaeh.bh Logo" style="height:60px;margin-bottom:28px;">
+             Remove or hide the .logo-placeholder div when real logo is added. -->
+        <div class="logo-placeholder">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 3v18"/></svg>
+          Project Logo Placeholder
+        </div>
+
+        <div class="label">University of Bahrain · Senior Project 2025–2026</div>
+        <h1>Alsaeh<em>.bh</em></h1>
+        <p class="hero-tagline">Tourism Recommender System for Bahrain</p>
+        <p class="hero-desc">
+          An AI-powered web application that generates personalized tourism plans for visitors to Bahrain — tailored to each traveler's preferences, budget, interests, and time.
+        </p>
+        <div class="hero-actions">
+          <!-- REPLACE #system-link with the real deployed URL -->
+          <a href="#system-link" class="btn btn-primary">Open Application ↗</a>
+          <a href="#about" class="btn btn-outline">Learn More</a>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint">Scroll</div>
+  </section>
+
+  <!-- ── ABOUT ─────────────────────────────────────── -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="reveal">
+          <div class="label">About the Project</div>
+          <h2 style="margin:12px 0 26px;">Why Alsaeh.bh?</h2>
+
+          <div class="problem-box">
+            <h3>The Problem</h3>
+            <p>
+              Tourists visiting Bahrain often struggle to plan personalized trips. Existing platforms provide generic recommendations that fail to account for individual preferences, budgets, trip duration, and travel style — leaving visitors with a suboptimal and time-consuming planning experience.
+            </p>
+          </div>
+
+          <div class="solution-box">
+            <h3>The Solution</h3>
+            <p>
+              Alsaeh.bh is an intelligent web application that collects user preferences and leverages the Gemini AI API to generate structured, day-by-day tourism plans tailored to each visitor's needs. Users can further refine their plans through an interactive chatbot.
+            </p>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="about-visual">
+            <div class="about-visual-label">Discover Bahrain,<br>your way.</div>
+            <div class="about-visual-sub">Personalized. AI-powered. Designed for you.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── OBJECTIVES ────────────────────────────────── -->
+  <section id="objectives">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="label">Project Objectives</div>
+        <h2>What We Set Out to Build</h2>
+        <p>A set of clear, targeted goals that guided the design and development of Alsaeh.bh.</p>
+      </div>
+      <div class="objectives-grid">
+
+        <div class="obj-card reveal">
+          <div class="obj-num">01</div>
+          <h3>Analyze User Preferences</h3>
+          <p>Collect and process each user's tourism interests, budget, trip duration, travel style, and constraints.</p>
+        </div>
+
+        <div class="obj-card reveal">
+          <div class="obj-num">02</div>
+          <h3>Generate AI-Powered Plans</h3>
+          <p>Use the Gemini API to automatically produce personalized tourism itineraries for Bahrain.</p>
+        </div>
+
+        <div class="obj-card reveal">
+          <div class="obj-num">03</div>
+          <h3>Recommend Attractions</h3>
+          <p>Suggest relevant attractions, restaurants, and activities based on each user's stated preferences.</p>
+        </div>
+
+        <div class="obj-card reveal">
+          <div class="obj-num">04</div>
+          <h3>Enable Plan Editing</h3>
+          <p>Allow users to refine and modify their generated plans through manual editing and chatbot interaction.</p>
+        </div>
+
+        <div class="obj-card reveal">
+          <div class="obj-num">05</div>
+          <h3>Deliver Structured Itineraries</h3>
+          <p>Output organized, day-by-day schedules with time slots, locations, prices, and Google Maps links.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURES ──────────────────────────────────── -->
+  <section id="features">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="label">System Features</div>
+        <h2>What Alsaeh.bh Offers</h2>
+        <p>A complete set of features built around the needs of tourists planning a trip to Bahrain.</p>
+      </div>
+      <div class="features-grid">
+
+        <div class="feat-card reveal">
+          <div class="feat-icon">🔐</div>
+          <h3>User Registration &amp; Login</h3>
+          <p>Secure account creation and authentication via email, password, and Google sign-in, powered by Supabase Auth.</p>
+        </div>
+
+        <div class="feat-card reveal">
+          <div class="feat-icon">🎯</div>
+          <h3>Tourism Preference Selection</h3>
+          <p>Users set their interests, budget range, trip duration, number of travelers, travel style, and any special constraints.</p>
+        </div>
+
+        <div class="feat-card reveal">
+          <div class="feat-icon">🤖</div>
+          <h3>AI-Generated Itinerary</h3>
+          <p>The Gemini API produces a complete, personalized travel plan based on submitted preferences and trip details.</p>
+        </div>
+
+        <div class="feat-card reveal">
+          <div class="feat-icon">📅</div>
+          <h3>Structured Daily Output</h3>
+          <p>Plans include day breakdowns, time slots, recommended locations with opening hours, estimated prices, and Google Maps links.</p>
+        </div>
+
+        <div class="feat-card reveal">
+          <div class="feat-icon">💬</div>
+          <h3>Chatbot-Assisted Editing</h3>
+          <p>An interactive AI chatbot lets users refine and modify their generated plans through natural conversation.</p>
+        </div>
+
+        <div class="feat-card reveal">
+          <div class="feat-icon">🗂️</div>
+          <h3>Save, View &amp; Delete Plans</h3>
+          <p>Users can save generated plans, browse their saved itineraries in a dedicated "My Plans" page, and delete plans they no longer need.</p>
+        </div>
+
+        <div class="feat-card reveal">
+          <div class="feat-icon">📊</div>
+          <h3>Admin Usage Reports</h3>
+          <p>Administrators can access a dashboard showing system analytics including total plans generated and popular tourism categories.</p>
+        </div>
+
+        <div class="feat-card reveal">
+          <div class="feat-icon">🌐</div>
+          <h3>Bilingual Interface</h3>
+          <p>The interface supports both Arabic and English, making the system accessible to local and international users alike.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TECH STACK ─────────────────────────────────── -->
+  <section id="stack">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="label">Technologies Used</div>
+        <h2>Built With Modern Tools</h2>
+        <p>Alsaeh.bh is built on a well-defined technology stack chosen for reliability, developer familiarity, and integration with AI services.</p>
+      </div>
+
+      <div class="stack-grid reveal">
+
+        <div class="stack-card">
+          <span class="stack-emoji">⚛️</span>
+          <div class="stack-role">Frontend</div>
+          <h3>Next.js</h3>
+        </div>
+
+        <div class="stack-card">
+          <span class="stack-emoji">⚡</span>
+          <div class="stack-role">Backend</div>
+          <h3>FastAPI</h3>
+        </div>
+
+        <div class="stack-card">
+          <span class="stack-emoji">🗄️</span>
+          <div class="stack-role">Database</div>
+          <h3>Supabase PostgreSQL</h3>
+        </div>
+
+        <div class="stack-card">
+          <span class="stack-emoji">🔑</span>
+          <div class="stack-role">Authentication</div>
+          <h3>Supabase &amp; Google Auth</h3>
+        </div>
+
+        <div class="stack-card">
+          <span class="stack-emoji">✨</span>
+          <div class="stack-role">AI Service</div>
+          <h3>Gemini API</h3>
+        </div>
+
+      </div>
+
+      <!-- Architecture diagram -->
+      <div class="arch-diagram reveal" style="margin-top:60px;">
+        <div class="arch-label">System Architecture Overview</div>
+
+        <div class="arch-tier">
+          <div class="arch-box">User Browser</div>
+        </div>
+        <div class="arch-arrow">↕</div>
+
+        <div class="arch-tier">
+          <div class="arch-box">Next.js Frontend</div>
+        </div>
+        <div class="arch-arrow">↕ HTTPS / REST</div>
+
+        <div class="arch-tier">
+          <div class="arch-box">FastAPI Backend</div>
+        </div>
+        <div class="arch-arrow">↕</div>
+
+        <div class="arch-tier">
+          <div class="arch-box">PostgreSQL (Supabase)</div>
+          <div class="arch-box ext">Gemini API</div>
+          <div class="arch-box ext">Google Auth / Supabase Auth</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SCREENSHOTS ───────────────────────────────── -->
+  <section id="screenshots">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="label">System Screenshots</div>
+        <h2>A Look at the System</h2>
+        <p>Visual overview of key pages across the Alsaeh.bh application.</p>
+      </div>
+      <div class="screenshots-grid">
+
+        <!-- REPLACE: For each card, replace the .ss-placeholder div with an <img> tag pointing to your real screenshot.
+             Example:
+             <img src="screenshots/landing.png" alt="Landing Page" style="width:100%;display:block;">
+        -->
+
+        <div class="ss-card reveal">
+          <div class="ss-placeholder">
+            <div class="ss-placeholder-icon">🏠</div>
+            <div class="ss-placeholder-text">Replace with screenshot</div>
+          </div>
+          <div class="ss-label">Landing Page</div>
+        </div>
+
+        <div class="ss-card reveal">
+          <div class="ss-placeholder">
+            <div class="ss-placeholder-icon">🔐</div>
+            <div class="ss-placeholder-text">Replace with screenshot</div>
+          </div>
+          <div class="ss-label">Login Page</div>
+        </div>
+
+        <div class="ss-card reveal">
+          <div class="ss-placeholder">
+            <div class="ss-placeholder-icon">📊</div>
+            <div class="ss-placeholder-text">Replace with screenshot</div>
+          </div>
+          <div class="ss-label">User Dashboard</div>
+        </div>
+
+        <div class="ss-card reveal">
+          <div class="ss-placeholder">
+            <div class="ss-placeholder-icon">✍️</div>
+            <div class="ss-placeholder-text">Replace with screenshot</div>
+          </div>
+          <div class="ss-label">Create Plan Page</div>
+        </div>
+
+        <div class="ss-card reveal">
+          <div class="ss-placeholder">
+            <div class="ss-placeholder-icon">🗺️</div>
+            <div class="ss-placeholder-text">Replace with screenshot</div>
+          </div>
+          <div class="ss-label">Generated Plan</div>
+        </div>
+
+        <div class="ss-card reveal">
+          <div class="ss-placeholder">
+            <div class="ss-placeholder-icon">💬</div>
+            <div class="ss-placeholder-text">Replace with screenshot</div>
+          </div>
+          <div class="ss-label">Chatbot Interface</div>
+        </div>
+
+        <div class="ss-card reveal">
+          <div class="ss-placeholder">
+            <div class="ss-placeholder-icon">🛠️</div>
+            <div class="ss-placeholder-text">Replace with screenshot</div>
+          </div>
+          <div class="ss-label">Admin Dashboard</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TEAM ──────────────────────────────────────── -->
+  <section id="team">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="label">The Team</div>
+        <h2>Meet the Developers</h2>
+        <p>Alsaeh.bh was designed and developed by three Computer Science students at the University of Bahrain.</p>
+      </div>
+
+      <div class="team-grid">
+
+        <div class="team-card reveal">
+          <div class="team-avatar">AO</div>
+          <h3>Ammar Osama Ali</h3>
+          <span class="team-id">202206744</span>
+        </div>
+
+        <div class="team-card reveal">
+          <div class="team-avatar">AT</div>
+          <h3>Ahmed Taha</h3>
+          <span class="team-id">202203742</span>
+        </div>
+
+        <div class="team-card reveal">
+          <div class="team-avatar">HA</div>
+          <h3>Hashem Ahmed</h3>
+          <span class="team-id">202204853</span>
+        </div>
+
+      </div>
+
+      <!-- Supervisor -->
+      <div class="supervisor-box reveal">
+        <div class="supervisor-icon">🎓</div>
+        <div>
+          <div class="role-tag">Project Supervisor</div>
+          <h3>Dr. Amal Ghanim</h3>
+          <p class="sub">College of Information Technology &mdash; University of Bahrain</p>
+        </div>
+      </div>
+
+      <!-- University info -->
+      <div class="uni-banner reveal">
+        <div class="uni-banner-icon">🏛️</div>
+        <div>
+          <h4>University of Bahrain</h4>
+          <p>College of Information Technology &mdash; Department of Computer Science<br>
+          ITSE498 &amp; ITCC498 Senior Project &mdash; Academic Year 2025–2026, Semester 2</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── FOOTER ─────────────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <div class="footer-brand">Alsaeh<span>.bh</span></div>
+      <p>Tourism Recommender System for Bahrain</p>
+      <div class="footer-divider"></div>
+      <p>
+        University of Bahrain &mdash; College of Information Technology<br>
+        Department of Computer Science<br>
+        Academic Year 2025–2026, Semester 2<br><br>
+        Supervised by <strong style="color:rgba(255,255,255,.75)">Dr. Amal Ghanim</strong>
+      </p>
+    </div>
+  </footer>
+
+  <!-- ── JS ─────────────────────────────────────────── -->
+  <script>
+    // Sticky nav
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
