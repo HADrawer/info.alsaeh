@@ -699,6 +699,7 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 22px;
+      align-items: start;
     }
     .ss-card {
       border-radius: var(--radius-xl);
@@ -708,6 +709,12 @@
       transition: transform var(--transition);
     }
     .ss-card:hover { transform: translateY(-4px); }
+    .ss-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: rgba(255,255,255,.04);
+    }
     .ss-placeholder {
       height: 200px;
       display: flex;
@@ -876,6 +883,7 @@
       .supervisor-box     { flex-direction: column; text-align: center; gap: 16px; }
       .uni-banner         { flex-direction: column; text-align: center; }
       .hero-actions       { flex-direction: column; }
+      .screenshots-grid   { grid-template-columns: 1fr; }
       section             { padding: 70px 0; }
     }
   </style>
@@ -1163,37 +1171,42 @@
       <div class="screenshots-grid">
 
         <div class="ss-card reveal">
-          <img src="screenshots/landing.png" alt="Landing Page" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
+          <img class="ss-image" src="screenshots/landing.png" alt="Landing Page" loading="lazy" decoding="async">
           <div class="ss-label">Landing Page</div>
         </div>
 
         <div class="ss-card reveal">
-          <img src="screenshots/login.png" alt="Login Page" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
+          <img class="ss-image" src="screenshots/login.png" alt="Login Page" loading="lazy" decoding="async">
           <div class="ss-label">Login Page</div>
         </div>
         
         <div class="ss-card reveal">
-          <img src="screenshots/register.png" alt="Register Page" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
+          <img class="ss-image" src="screenshots/register.png" alt="Register Page" loading="lazy" decoding="async">
           <div class="ss-label">Register Page</div>
         </div>
 
         <div class="ss-card reveal">
-          <img src="screenshots/dashboard.png" alt="User Dashboard" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
+          <img class="ss-image" src="screenshots/dasboard.png" alt="User Dashboard" loading="lazy" decoding="async">
           <div class="ss-label">User Dashboard</div>
         </div>
 
         <div class="ss-card reveal">
-          <img src="screenshots/create plan.png" alt="Generated Plan" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
+          <img class="ss-image" src="screenshots/create-plan.png" alt="Generated Plan" loading="lazy" decoding="async">
           <div class="ss-label">Generated Plan</div>
         </div>
 
         <div class="ss-card reveal">
-          <img src="screenshots/chat.png" alt="Chatbot Interface" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
+          <img class="ss-image" src="screenshots/chat.png" alt="Chatbot Interface" loading="lazy" decoding="async">
           <div class="ss-label">Chatbot Interface</div>
         </div>
 
         <div class="ss-card reveal">
-          <img src="screenshots/admin.png" alt="Admin Dashboard" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
+          <img class="ss-image" src="screenshots/profile-settings.png" alt="Profile Settings" loading="lazy" decoding="async">
+          <div class="ss-label">Profile Settings</div>
+        </div>
+
+        <div class="ss-card reveal">
+          <img class="ss-image" src="screenshots/admin.png" alt="Admin Dashboard" loading="lazy" decoding="async">
           <div class="ss-label">Admin Dashboard</div>
         </div>
 
@@ -1373,7 +1386,7 @@
             ['Admin Usage Reports', 'Administrators can access a dashboard showing system analytics including total plans generated and popular tourism categories.'],
             ['Bilingual Interface', 'The interface supports both Arabic and English, making the system accessible to local and international users alike.']
           ],
-          screenshots: ['Landing Page', 'Login Page', 'Register Page', 'User Dashboard', 'Generated Plan', 'Chatbot Interface', 'Admin Dashboard']
+          screenshots: ['Landing Page', 'Login Page', 'Register Page', 'User Dashboard', 'Generated Plan', 'Chatbot Interface', 'Profile Settings', 'Admin Dashboard']
         },
         ar: {
           title: 'Alsaeh.bh - نظام توصية سياحي للبحرين',
@@ -1443,7 +1456,7 @@
             ['تقارير استخدام للإدارة', 'يمكن للمسؤولين الوصول إلى لوحة تعرض تحليلات النظام مثل إجمالي الخطط المنشأة والفئات السياحية الشائعة.'],
             ['واجهة ثنائية اللغة', 'تدعم الواجهة العربية والإنجليزية لتكون مناسبة للمستخدمين المحليين والدوليين.']
           ],
-          screenshots: ['الصفحة الرئيسية', 'صفحة تسجيل الدخول', 'صفحة التسجيل', 'لوحة المستخدم', 'الخطة المنشأة', 'واجهة روبوت المحادثة', 'لوحة الإدارة']
+          screenshots: ['الصفحة الرئيسية', 'صفحة تسجيل الدخول', 'صفحة التسجيل', 'لوحة المستخدم', 'الخطة المنشأة', 'واجهة روبوت المحادثة', 'إعدادات الملف الشخصي', 'لوحة الإدارة']
         }
       };
 
