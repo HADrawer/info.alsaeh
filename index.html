@@ -244,6 +244,58 @@
     }
     .nav-links a:hover { color: var(--primary); }
 
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      width: 48px;
+      height: 42px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      z-index: 101;
+    }
+    .hamburger span.hamburger-line {
+      width: 100%;
+      height: 3px;
+      background: var(--text-main);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+    .hamburger span.hamburger-label {
+      display: none;
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: .08em;
+    }
+    .hamburger.active .hamburger-line:nth-of-type(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+    .hamburger.active .hamburger-line:nth-of-type(2) {
+      opacity: 0;
+    }
+    .hamburger.active .hamburger-line:nth-of-type(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    body.nav-open {
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    body.nav-open nav {
+      z-index: 104;
+    }
+
+    .nav-overlay {
+      display: none;
+    }
+
     .nav-actions {
       display: flex;
       align-items: center;
@@ -292,6 +344,10 @@
       min-width: 52px;
       justify-content: center;
       padding-inline: 16px;
+    }
+
+    .mobile-lang-item {
+      display: none;
     }
 
     html[dir="rtl"] body {
@@ -875,10 +931,128 @@
     @media (max-width: 768px) {
       .about-grid         { grid-template-columns: 1fr; }
       .about-visual       { min-height: 260px; }
-      .nav-links          { display: none; }
+      .hamburger          { display: inline-flex; }
+      .nav-inner          { gap: 10px; }
+      .nav-brand          { font-size: 1.12rem; min-width: 0; }
+      .nav-logo-mark      { height: 34px; }
+      .nav-links          { 
+        display: flex; 
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: min(82vw, 320px);
+        max-width: calc(100vw - 24px);
+        height: 100svh;
+        max-height: 100svh;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        background: color-mix(in srgb, var(--bg-card) 96%, transparent);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-left: 1px solid var(--border-soft);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: calc(72px + env(safe-area-inset-top)) 12px calc(20px + env(safe-area-inset-bottom));
+        box-shadow: var(--shadow-lg);
+        transform: translateX(105%);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: transform var(--transition), opacity var(--transition), visibility var(--transition);
+        z-index: 102;
+      }
+      .nav-links.open     { 
+        transform: translateX(0);
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+      .nav-links li       { border-bottom: 1px solid var(--border-soft); }
+      .nav-links li:last-child { border-bottom: none; }
+      .nav-links a        { 
+        display: flex;
+        align-items: center;
+        min-height: 48px;
+        padding: 14px 14px;
+        border-radius: var(--radius-md);
+        color: var(--text-secondary);
+        font-size: .96rem;
+        text-align: left;
+      }
+      .nav-links a:hover,
+      .nav-links a:focus-visible {
+        color: var(--primary);
+        background: var(--primary-light);
+        outline: none;
+      }
       .nav-actions        { gap: 8px; }
-      .nav-system-link  { display: none; }
-      .lang-toggle        { padding-inline: 14px; min-width: 48px; }
+      .nav-system-link    { display: none; }
+      .lang-toggle        { display: none; }
+      .mobile-lang-item   { display: block; padding: 12px 0 0; border-bottom: none; }
+      .mobile-lang-toggle {
+        width: 100%;
+        min-height: 48px;
+        justify-content: center;
+        border-radius: var(--radius-md);
+      }
+
+      .hamburger {
+        width: 48px;
+        min-width: 48px;
+        height: 48px;
+        padding: 10px;
+        border-radius: var(--radius-full);
+        background: var(--bg-card);
+        border: 1px solid var(--border-soft);
+        box-shadow: var(--shadow-sm);
+        flex-direction: column;
+        gap: 5px;
+        position: relative;
+      }
+      .hamburger .hamburger-line {
+        display: block;
+        width: 20px;
+        height: 2px;
+      }
+      .hamburger .hamburger-label { display: none; }
+      .hamburger.active {
+        z-index: 103;
+      }
+
+      /* Mobile menu overlay */
+      .nav-overlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.48);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity var(--transition), visibility var(--transition);
+        z-index: 99;
+      }
+      .nav-overlay.open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      html[dir="rtl"] .nav-links {
+        right: auto;
+        left: 0;
+        border-left: none;
+        border-right: 1px solid var(--border-soft);
+        transform: translateX(-105%);
+      }
+      html[dir="rtl"] .nav-links.open {
+        transform: translateX(0);
+      }
+      html[dir="rtl"] .nav-links a {
+        text-align: right;
+        justify-content: flex-start;
+      }
       .arch-diagram       { padding: 28px 18px; }
       .supervisor-box     { flex-direction: column; text-align: center; gap: 16px; }
       .uni-banner         { flex-direction: column; text-align: center; }
@@ -898,13 +1072,22 @@
         <span class="nav-logo-mark"></span>
         Alsaeh.bh
       </a>
-      <ul class="nav-links">
+      <button class="hamburger" id="hamburger" type="button" aria-label="Open navigation menu" aria-controls="navLinks" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-label">AR</span>
+      </button>
+      <ul class="nav-links" id="navLinks">
         <li><a href="#about" data-i18n="nav.about">About</a></li>
         <li><a href="#objectives" data-i18n="nav.objectives">Objectives</a></li>
         <li><a href="#features" data-i18n="nav.features">Features</a></li>
         <li><a href="#stack" data-i18n="nav.technology">Technology</a></li>
         <li><a href="#screenshots" data-i18n="nav.screenshots">Screenshots</a></li>
         <li><a href="#team" data-i18n="nav.team">Team</a></li>
+        <li class="mobile-lang-item">
+          <button class="btn btn-outline mobile-lang-toggle" id="languageToggleMobile" type="button" aria-label="Switch to Arabic" data-i18n="language.toggle">AR</button>
+        </li>
       </ul>
       <!-- REPLACE #system-link with the real URL when the app is deployed -->
       <button class="btn btn-outline lang-toggle" id="languageToggle" type="button" aria-label="Switch to Arabic" data-i18n="language.toggle">AR</button>
@@ -913,6 +1096,9 @@
       </a>
     </div>
   </nav>
+
+  <!-- Mobile menu overlay -->
+  <div class="nav-overlay" id="navOverlay"></div>
 
   <!-- ── HERO ─────────────────────────────────────── -->
   <section id="hero">
@@ -1499,7 +1685,7 @@
         'footer.desc': 'footer .container > p:last-of-type'
       };
 
-      const languageToggle = document.getElementById('languageToggle');
+      const languageToggles = document.querySelectorAll('#languageToggle, #languageToggleMobile');
 
       function setContent(selector, value) {
         const element = document.querySelector(selector);
@@ -1544,10 +1730,10 @@
           if (locale.screenshots[index]) label.textContent = locale.screenshots[index];
         });
 
-        if (languageToggle) {
-          languageToggle.textContent = locale.button;
-          languageToggle.setAttribute('aria-label', locale.aria);
-        }
+        languageToggles.forEach((toggle) => {
+          toggle.textContent = locale.button;
+          toggle.setAttribute('aria-label', locale.aria);
+        });
 
         try {
           localStorage.setItem('language', lang);
@@ -1565,12 +1751,12 @@
 
       applyLanguage(currentLanguage);
 
-      if (languageToggle) {
-        languageToggle.addEventListener('click', () => {
+      languageToggles.forEach((toggle) => {
+        toggle.addEventListener('click', () => {
           currentLanguage = document.documentElement.lang === 'ar' ? 'en' : 'ar';
           applyLanguage(currentLanguage);
         });
-      }
+      });
     })();
 
     const navbar = document.getElementById('navbar');
@@ -1590,6 +1776,60 @@
     }, { threshold: 0.12 });
 
     reveals.forEach(el => observer.observe(el));
+
+    // ── Mobile menu toggle ────────────────────────────────
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    const navOverlay = document.getElementById('navOverlay');
+    const mobileMenuQuery = window.matchMedia('(max-width: 768px)');
+
+    const closeMobileMenu = () => {
+      hamburger?.classList.remove('active');
+      navLinks?.classList.remove('open');
+      navOverlay?.classList.remove('open');
+      document.body.classList.remove('nav-open');
+      hamburger?.setAttribute('aria-expanded', 'false');
+      hamburger?.setAttribute('aria-label', 'Open navigation menu');
+    };
+
+    const openMobileMenu = () => {
+      hamburger?.classList.add('active');
+      navLinks?.classList.add('open');
+      navOverlay?.classList.add('open');
+      document.body.classList.add('nav-open');
+      hamburger?.setAttribute('aria-expanded', 'true');
+      hamburger?.setAttribute('aria-label', 'Close navigation menu');
+    };
+
+    if (hamburger && navLinks && navOverlay) {
+      hamburger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        navLinks.classList.contains('open') ? closeMobileMenu() : openMobileMenu();
+      });
+
+      // Close menu when clicking a link
+      navLinks.addEventListener('click', (e) => {
+        if (e.target.closest('a')) closeMobileMenu();
+      });
+
+      // Close menu when clicking overlay or outside the drawer
+      navOverlay.addEventListener('click', closeMobileMenu);
+
+      document.addEventListener('click', (e) => {
+        if (!navLinks.classList.contains('open')) return;
+        if (!navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+          closeMobileMenu();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMobileMenu();
+      });
+
+      mobileMenuQuery.addEventListener('change', (e) => {
+        if (!e.matches) closeMobileMenu();
+      });
+    }
   </script>
 
 </body>
