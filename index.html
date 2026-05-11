@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -244,6 +244,13 @@
     }
     .nav-links a:hover { color: var(--primary); }
 
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
     /* Buttons — matching main app style */
     .btn {
       display: inline-flex;
@@ -279,6 +286,45 @@
       border-color: var(--primary);
       color: var(--primary);
       background: var(--primary-light);
+    }
+
+    .lang-toggle {
+      min-width: 52px;
+      justify-content: center;
+      padding-inline: 16px;
+    }
+
+    html[dir="rtl"] body {
+      direction: rtl;
+      text-align: right;
+    }
+
+    html[dir="rtl"] .nav-brand,
+    html[dir="rtl"] .nav-links,
+    html[dir="rtl"] .nav-actions,
+    html[dir="rtl"] .hero-actions,
+    html[dir="rtl"] .logo-placeholder,
+    html[dir="rtl"] .uni-banner,
+    html[dir="rtl"] .supervisor-box {
+      direction: rtl;
+    }
+
+    html[dir="rtl"] .hero-content,
+    html[dir="rtl"] .section-head p,
+    html[dir="rtl"] .hero-desc {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    html[dir="rtl"] .problem-box,
+    html[dir="rtl"] .solution-box {
+      border-left: 1px solid var(--border-soft);
+      border-right: 3px solid var(--primary);
+      border-radius: var(--radius-md) 0 0 var(--radius-md);
+    }
+
+    html[dir="rtl"] .solution-box {
+      border-right-color: var(--text-secondary);
     }
 
     /* ─── HERO ───────────────────────────────────────────── */
@@ -651,7 +697,7 @@
 
     .screenshots-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 22px;
     }
     .ss-card {
@@ -776,7 +822,7 @@
 
     /* ─── FOOTER ─────────────────────────────────────────── */
     footer {
-      background: var(--text-main);
+      background: #1A1410;
       color: rgba(255,255,255,.55);
       text-align: center;
       padding: 48px 0 32px;
@@ -823,6 +869,9 @@
       .about-grid         { grid-template-columns: 1fr; }
       .about-visual       { min-height: 260px; }
       .nav-links          { display: none; }
+      .nav-actions        { gap: 8px; }
+      .nav-system-link  { display: none; }
+      .lang-toggle        { padding-inline: 14px; min-width: 48px; }
       .arch-diagram       { padding: 28px 18px; }
       .supervisor-box     { flex-direction: column; text-align: center; gap: 16px; }
       .uni-banner         { flex-direction: column; text-align: center; }
@@ -842,15 +891,16 @@
         Alsaeh.bh
       </a>
       <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#objectives">Objectives</a></li>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#stack">Technology</a></li>
-        <li><a href="#screenshots">Screenshots</a></li>
-        <li><a href="#team">Team</a></li>
+        <li><a href="#about" data-i18n="nav.about">About</a></li>
+        <li><a href="#objectives" data-i18n="nav.objectives">Objectives</a></li>
+        <li><a href="#features" data-i18n="nav.features">Features</a></li>
+        <li><a href="#stack" data-i18n="nav.technology">Technology</a></li>
+        <li><a href="#screenshots" data-i18n="nav.screenshots">Screenshots</a></li>
+        <li><a href="#team" data-i18n="nav.team">Team</a></li>
       </ul>
       <!-- REPLACE #system-link with the real URL when the app is deployed -->
-      <a href="https://www.alsaeh.net/" class="btn btn-primary" style="font-size:.85rem;padding:10px 22px;">
+      <button class="btn btn-outline lang-toggle" id="languageToggle" type="button" aria-label="Switch to Arabic" data-i18n="language.toggle">AR</button>
+      <a href="https://www.alsaeh.net/" class="btn btn-primary nav-system-link" style="font-size:.85rem;padding:10px 22px;" data-i18n="nav.visit">
         Visit System ↗
       </a>
     </div>
@@ -1113,37 +1163,37 @@
       <div class="screenshots-grid">
 
         <div class="ss-card reveal">
-          <img src="screenshots/landing.png" alt="Landing Page" style="width:100%;height:200px;display:block;object-fit:cover;">
+          <img src="screenshots/landing.png" alt="Landing Page" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
           <div class="ss-label">Landing Page</div>
         </div>
 
         <div class="ss-card reveal">
-          <img src="screenshots/login.png" alt="Login Page" style="width:100%;height:200px;display:block;object-fit:cover;">
+          <img src="screenshots/login.png" alt="Login Page" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
           <div class="ss-label">Login Page</div>
         </div>
         
         <div class="ss-card reveal">
-          <img src="screenshots/register.png" alt="Register Page" style="width:100%;height:200px;display:block;object-fit:cover;">
+          <img src="screenshots/register.png" alt="Register Page" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
           <div class="ss-label">Register Page</div>
         </div>
 
         <div class="ss-card reveal">
-          <img src="screenshots/dashboard.png" alt="User Dashboard" style="width:100%;height:200px;display:block;object-fit:cover;">
+          <img src="screenshots/dashboard.png" alt="User Dashboard" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
           <div class="ss-label">User Dashboard</div>
         </div>
 
         <div class="ss-card reveal">
-          <img src="screenshots/create plan.png" alt="Generated Plan" style="width:100%;height:200px;display:block;object-fit:cover;">
+          <img src="screenshots/create plan.png" alt="Generated Plan" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
           <div class="ss-label">Generated Plan</div>
         </div>
 
         <div class="ss-card reveal">
-          <img src="screenshots/chat.png" alt="Chatbot Interface" style="width:100%;height:200px;display:block;object-fit:cover;">
+          <img src="screenshots/chat.png" alt="Chatbot Interface" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
           <div class="ss-label">Chatbot Interface</div>
         </div>
 
         <div class="ss-card reveal">
-          <img src="screenshots/admin.png" alt="Admin Dashboard" style="width:100%;height:200px;display:block;object-fit:cover;">
+          <img src="screenshots/admin.png" alt="Admin Dashboard" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;">
           <div class="ss-label">Admin Dashboard</div>
         </div>
 
@@ -1252,6 +1302,264 @@
     });
 
     // ── Sticky nav ────────────────────────────────────────
+    // Language localization
+    (function initLocalization() {
+      const translations = {
+        en: {
+          title: 'Alsaeh.bh - Tourism Recommender System for Bahrain',
+          dir: 'ltr',
+          button: 'AR',
+          aria: 'Switch to Arabic',
+          text: {
+            'nav.about': 'About',
+            'nav.objectives': 'Objectives',
+            'nav.features': 'Features',
+            'nav.technology': 'Technology',
+            'nav.screenshots': 'Screenshots',
+            'nav.team': 'Team',
+            'nav.visit': 'Visit System',
+            'hero.badge': 'University of Bahrain - Senior Project 2025-2026',
+            'hero.tagline': 'Tourism Recommender System for Bahrain',
+            'hero.desc': "An AI-powered web application that generates personalized tourism plans for visitors to Bahrain - tailored to each traveler's preferences, budget, interests, and time.",
+            'hero.open': 'Open Application',
+            'hero.learn': 'Learn More',
+            'scroll': 'Scroll',
+            'about.label': 'About the Project',
+            'about.title': 'Why Alsaeh.bh?',
+            'about.problemTitle': 'The Problem',
+            'about.problemText': 'Tourists visiting Bahrain often struggle to plan personalized trips. Existing platforms provide generic recommendations that fail to account for individual preferences, budgets, trip duration, and travel style - leaving visitors with a suboptimal and time-consuming planning experience.',
+            'about.solutionTitle': 'The Solution',
+            'about.solutionText': "Alsaeh.bh is an intelligent web application that collects user preferences and leverages the Gemini AI API to generate structured, day-by-day tourism plans tailored to each visitor's needs. Users can further refine their plans through an interactive chatbot.",
+            'about.visualTitle': 'Discover Bahrain,<br>your way.',
+            'about.visualSub': 'Personalized. AI-powered. Designed for you.',
+            'objectives.label': 'Project Objectives',
+            'objectives.title': 'What We Set Out to Build',
+            'objectives.desc': 'A set of clear, targeted goals that guided the design and development of Alsaeh.bh.',
+            'features.label': 'System Features',
+            'features.title': 'What Alsaeh.bh Offers',
+            'features.desc': 'A complete set of features built around the needs of tourists planning a trip to Bahrain.',
+            'stack.label': 'Technologies Used',
+            'stack.title': 'Built With Modern Tools',
+            'stack.desc': 'Alsaeh.bh is built on a well-defined technology stack chosen for reliability, developer familiarity, and integration with AI services.',
+            'stack.archTitle': 'System Architecture Overview',
+            'screenshots.label': 'System Screenshots',
+            'screenshots.title': 'A Look at the System',
+            'screenshots.desc': 'Visual overview of key pages across the Alsaeh.bh application.',
+            'team.label': 'The Team',
+            'team.title': 'Meet the Developers',
+            'team.desc': 'Alsaeh.bh was designed and developed by three Computer Science students at the University of Bahrain.',
+            'team.supervisorRole': 'Project Supervisor',
+            'team.supervisorSub': 'College of Information Technology - University of Bahrain',
+            'uni.title': 'University of Bahrain',
+            'uni.desc': 'College of Information Technology - Department of Computer Science<br>ITSE498 &amp; ITCC498 Senior Project - Academic Year 2025-2026, Semester 2',
+            'footer.tagline': 'Tourism Recommender System for Bahrain',
+            'footer.desc': 'University of Bahrain - College of Information Technology<br>Department of Computer Science<br>Academic Year 2025-2026, Semester 2<br><br>Supervised by <strong style="color:rgba(255,255,255,.8)">Dr. Amal Ghanim</strong>'
+          },
+          objectives: [
+            ['Analyze User Preferences', "Collect and process each user's tourism interests, budget, trip duration, travel style, and constraints."],
+            ['Generate AI-Powered Plans', 'Use the Gemini API to automatically produce personalized tourism itineraries for Bahrain.'],
+            ['Recommend Attractions', "Suggest relevant attractions, restaurants, and activities based on each user's stated preferences."],
+            ['Enable Plan Editing', 'Allow users to refine and modify their generated plans through manual editing and chatbot interaction.'],
+            ['Deliver Structured Itineraries', 'Output organized, day-by-day schedules with time slots, locations, prices, and Google Maps links.']
+          ],
+          features: [
+            ['User Registration & Login', 'Secure account creation and authentication via email, password, and Google sign-in, powered by Supabase Auth.'],
+            ['Tourism Preference Selection', 'Users set their interests, budget range, trip duration, number of travelers, travel style, and any special constraints.'],
+            ['AI-Generated Itinerary', 'The Gemini API produces a complete, personalized travel plan based on submitted preferences and trip details.'],
+            ['Structured Daily Output', 'Plans include day breakdowns, time slots, recommended locations with opening hours, estimated prices, and Google Maps links.'],
+            ['Chatbot-Assisted Editing', 'An interactive AI chatbot lets users refine and modify their generated plans through natural conversation.'],
+            ['Save, View & Delete Plans', 'Users can save generated plans, browse their saved itineraries in a dedicated "My Plans" page, and delete plans they no longer need.'],
+            ['Export as PDF or Image', 'Users can export their saved itineraries as a PDF or image file for offline access and sharing.'],
+            ['Admin Usage Reports', 'Administrators can access a dashboard showing system analytics including total plans generated and popular tourism categories.'],
+            ['Bilingual Interface', 'The interface supports both Arabic and English, making the system accessible to local and international users alike.']
+          ],
+          screenshots: ['Landing Page', 'Login Page', 'Register Page', 'User Dashboard', 'Generated Plan', 'Chatbot Interface', 'Admin Dashboard']
+        },
+        ar: {
+          title: 'Alsaeh.bh - نظام توصية سياحي للبحرين',
+          dir: 'rtl',
+          button: 'EN',
+          aria: 'Switch to English',
+          text: {
+            'nav.about': 'نبذة',
+            'nav.objectives': 'الأهداف',
+            'nav.features': 'المميزات',
+            'nav.technology': 'التقنيات',
+            'nav.screenshots': 'الصور',
+            'nav.team': 'الفريق',
+            'nav.visit': 'زيارة النظام',
+            'hero.badge': 'جامعة البحرين - مشروع تخرج 2025-2026',
+            'hero.tagline': 'نظام توصية سياحي للبحرين',
+            'hero.desc': 'تطبيق ويب مدعوم بالذكاء الاصطناعي ينشئ خططا سياحية مخصصة لزوار البحرين حسب تفضيلات كل مسافر وميزانيته واهتماماته ووقته.',
+            'hero.open': 'فتح التطبيق',
+            'hero.learn': 'اعرف المزيد',
+            'scroll': 'مرر',
+            'about.label': 'نبذة عن المشروع',
+            'about.title': 'لماذا Alsaeh.bh؟',
+            'about.problemTitle': 'المشكلة',
+            'about.problemText': 'يواجه السياح في البحرين صعوبة في تخطيط رحلات شخصية. فالمنصات الحالية تقدم توصيات عامة لا تراعي التفضيلات الفردية والميزانية ومدة الرحلة وأسلوب السفر، مما يجعل التخطيط أقل ملاءمة وأكثر استهلاكا للوقت.',
+            'about.solutionTitle': 'الحل',
+            'about.solutionText': 'Alsaeh.bh تطبيق ذكي يجمع تفضيلات المستخدم ويستخدم واجهة Gemini AI API لإنشاء خطط سياحية منظمة يوما بيوم ومصممة حسب احتياجات كل زائر. ويمكن للمستخدمين تعديل خططهم أكثر عبر روبوت محادثة تفاعلي.',
+            'about.visualTitle': 'اكتشف البحرين<br>بطريقتك.',
+            'about.visualSub': 'مخصص. مدعوم بالذكاء الاصطناعي. مصمم لك.',
+            'objectives.label': 'أهداف المشروع',
+            'objectives.title': 'ما الذي سعينا إلى بنائه',
+            'objectives.desc': 'مجموعة أهداف واضحة ومحددة وجهت تصميم وتطوير Alsaeh.bh.',
+            'features.label': 'مميزات النظام',
+            'features.title': 'ماذا يقدم Alsaeh.bh',
+            'features.desc': 'مجموعة متكاملة من المميزات المبنية حول احتياجات السياح أثناء التخطيط لرحلة في البحرين.',
+            'stack.label': 'التقنيات المستخدمة',
+            'stack.title': 'مبني بأدوات حديثة',
+            'stack.desc': 'تم بناء Alsaeh.bh على مجموعة تقنيات واضحة اختيرت للموثوقية وسهولة التطوير والتكامل مع خدمات الذكاء الاصطناعي.',
+            'stack.archTitle': 'نظرة عامة على بنية النظام',
+            'screenshots.label': 'صور النظام',
+            'screenshots.title': 'نظرة على النظام',
+            'screenshots.desc': 'عرض مرئي لأهم الصفحات داخل تطبيق Alsaeh.bh.',
+            'team.label': 'الفريق',
+            'team.title': 'تعرف على المطورين',
+            'team.desc': 'تم تصميم وتطوير Alsaeh.bh بواسطة ثلاثة طلاب علوم حاسوب في جامعة البحرين.',
+            'team.supervisorRole': 'مشرفة المشروع',
+            'team.supervisorSub': 'كلية تقنية المعلومات - جامعة البحرين',
+            'uni.title': 'جامعة البحرين',
+            'uni.desc': 'كلية تقنية المعلومات - قسم علوم الحاسوب<br>مشروع التخرج ITSE498 و ITCC498 - العام الأكاديمي 2025-2026، الفصل الثاني',
+            'footer.tagline': 'نظام توصية سياحي للبحرين',
+            'footer.desc': 'جامعة البحرين - كلية تقنية المعلومات<br>قسم علوم الحاسوب<br>العام الأكاديمي 2025-2026، الفصل الثاني<br><br>إشراف <strong style="color:rgba(255,255,255,.8)">د. أمل غانم</strong>'
+          },
+          objectives: [
+            ['تحليل تفضيلات المستخدم', 'جمع ومعالجة اهتمامات كل مستخدم السياحية وميزانيته ومدة الرحلة وأسلوب السفر والقيود الخاصة به.'],
+            ['إنشاء خطط مدعومة بالذكاء الاصطناعي', 'استخدام Gemini API لإنتاج مسارات سياحية مخصصة للبحرين بشكل تلقائي.'],
+            ['اقتراح المعالم السياحية', 'توصية المستخدم بمعالم ومطاعم وأنشطة مناسبة بناء على تفضيلاته.'],
+            ['تمكين تعديل الخطة', 'السماح للمستخدمين بتحسين الخطط المنشأة وتعديلها يدويا أو عبر روبوت المحادثة.'],
+            ['تقديم مسارات منظمة', 'إخراج جداول يومية منظمة تتضمن الأوقات والمواقع والأسعار وروابط خرائط Google.']
+          ],
+          features: [
+            ['تسجيل المستخدم وتسجيل الدخول', 'إنشاء حساب آمن وتسجيل الدخول بالبريد الإلكتروني وكلمة المرور وحساب Google عبر Supabase Auth.'],
+            ['اختيار التفضيلات السياحية', 'يحدد المستخدم اهتماماته ونطاق الميزانية ومدة الرحلة وعدد المسافرين وأسلوب السفر وأي قيود خاصة.'],
+            ['مسار سياحي منشأ بالذكاء الاصطناعي', 'ينتج Gemini API خطة سفر كاملة ومخصصة بناء على التفضيلات وتفاصيل الرحلة.'],
+            ['مخرجات يومية منظمة', 'تتضمن الخطط تقسيما يوميا وأوقاتا ومواقع مقترحة مع ساعات العمل والأسعار التقديرية وروابط خرائط Google.'],
+            ['تعديل بمساعدة روبوت المحادثة', 'يساعد روبوت محادثة تفاعلي المستخدمين على تحسين الخطط وتعديلها باستخدام المحادثة الطبيعية.'],
+            ['حفظ الخطط وعرضها وحذفها', 'يمكن للمستخدم حفظ الخطط المنشأة واستعراض المسارات المحفوظة في صفحة "خططي" وحذف ما لم يعد يحتاجه.'],
+            ['تصدير PDF أو صورة', 'يمكن تصدير المسارات المحفوظة كملف PDF أو صورة للاستخدام دون اتصال أو للمشاركة.'],
+            ['تقارير استخدام للإدارة', 'يمكن للمسؤولين الوصول إلى لوحة تعرض تحليلات النظام مثل إجمالي الخطط المنشأة والفئات السياحية الشائعة.'],
+            ['واجهة ثنائية اللغة', 'تدعم الواجهة العربية والإنجليزية لتكون مناسبة للمستخدمين المحليين والدوليين.']
+          ],
+          screenshots: ['الصفحة الرئيسية', 'صفحة تسجيل الدخول', 'صفحة التسجيل', 'لوحة المستخدم', 'الخطة المنشأة', 'واجهة روبوت المحادثة', 'لوحة الإدارة']
+        }
+      };
+
+      const bindings = {
+        'hero.badge': '.hero-badge',
+        'hero.tagline': '.hero-tagline',
+        'hero.desc': '.hero-desc',
+        'hero.open': '.hero-actions .btn-primary',
+        'hero.learn': '.hero-actions .btn-outline',
+        'scroll': '.scroll-hint',
+        'about.label': '#about .label',
+        'about.title': '#about h2',
+        'about.problemTitle': '.problem-box h3',
+        'about.problemText': '.problem-box p',
+        'about.solutionTitle': '.solution-box h3',
+        'about.solutionText': '.solution-box p',
+        'about.visualTitle': '.about-visual-label',
+        'about.visualSub': '.about-visual-sub',
+        'objectives.label': '#objectives .label',
+        'objectives.title': '#objectives h2',
+        'objectives.desc': '#objectives .section-head p',
+        'features.label': '#features .label',
+        'features.title': '#features h2',
+        'features.desc': '#features .section-head p',
+        'stack.label': '#stack .label',
+        'stack.title': '#stack h2',
+        'stack.desc': '#stack .section-head p',
+        'stack.archTitle': '.arch-label',
+        'screenshots.label': '#screenshots .label',
+        'screenshots.title': '#screenshots h2',
+        'screenshots.desc': '#screenshots .section-head p',
+        'team.label': '#team .label',
+        'team.title': '#team .section-head h2',
+        'team.desc': '#team .section-head p',
+        'team.supervisorRole': '.role-tag',
+        'team.supervisorSub': '.supervisor-box .sub',
+        'uni.title': '.uni-banner h4',
+        'uni.desc': '.uni-banner p',
+        'footer.tagline': 'footer .container > p:first-of-type',
+        'footer.desc': 'footer .container > p:last-of-type'
+      };
+
+      const languageToggle = document.getElementById('languageToggle');
+
+      function setContent(selector, value) {
+        const element = document.querySelector(selector);
+        if (!element || !value) return;
+        if (value.includes('<br>') || value.includes('<strong')) {
+          element.innerHTML = value;
+        } else {
+          element.textContent = value;
+        }
+      }
+
+      function setCards(selector, items) {
+        document.querySelectorAll(selector).forEach((card, index) => {
+          const item = items[index];
+          if (!item) return;
+          const heading = card.querySelector('h3');
+          const paragraph = card.querySelector('p');
+          if (heading) heading.textContent = item[0];
+          if (paragraph) paragraph.textContent = item[1];
+        });
+      }
+
+      function applyLanguage(lang) {
+        const locale = translations[lang] || translations.en;
+        document.documentElement.lang = lang;
+        document.documentElement.dir = locale.dir;
+        document.title = locale.title;
+
+        document.querySelectorAll('[data-i18n]').forEach((element) => {
+          const key = element.getAttribute('data-i18n');
+          if (locale.text[key]) element.textContent = locale.text[key];
+        });
+
+        Object.entries(bindings).forEach(([key, selector]) => {
+          setContent(selector, locale.text[key]);
+        });
+
+        setCards('.obj-card', locale.objectives);
+        setCards('.feat-card', locale.features);
+
+        document.querySelectorAll('.ss-label').forEach((label, index) => {
+          if (locale.screenshots[index]) label.textContent = locale.screenshots[index];
+        });
+
+        if (languageToggle) {
+          languageToggle.textContent = locale.button;
+          languageToggle.setAttribute('aria-label', locale.aria);
+        }
+
+        try {
+          localStorage.setItem('language', lang);
+        } catch (e) {
+          // Ignore storage failures; the toggle still works for this page view.
+        }
+      }
+
+      let currentLanguage = 'en';
+      try {
+        currentLanguage = localStorage.getItem('language') === 'ar' ? 'ar' : 'en';
+      } catch (e) {
+        currentLanguage = 'en';
+      }
+
+      applyLanguage(currentLanguage);
+
+      if (languageToggle) {
+        languageToggle.addEventListener('click', () => {
+          currentLanguage = document.documentElement.lang === 'ar' ? 'en' : 'ar';
+          applyLanguage(currentLanguage);
+        });
+      }
+    })();
+
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 40);
